@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel da Dona Onça · Operação Férias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0e2a1c;--bg2:#143a27;--amber:#f5a623;--lime:#c9f26b;--ink:#0a1a12;--txt:#f4f1e6;--mut:#a9c4b2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:'Nunito',system-ui,sans-serif;font-weight:500;line-height:1.5;
+background-image:radial-gradient(circle at 12% 18%,#0a1a12 0 14px,transparent 15px),radial-gradient(circle at 80% 62%,#0a1a12 0 20px,transparent 21px),radial-gradient(circle at 40% 90%,#0a1a12 0 11px,transparent 12px);
+background-size:340px 340px,420px 420px,280px 280px}
+main{max-width:640px;margin:0 auto;padding:28px 18px 60px}
+h1,h2{font-family:'Bagel Fat One','Arial Black',sans-serif;font-weight:400;line-height:1.05;margin:0}
+h1{font-size:clamp(2.4rem,11vw,3.8rem);color:var(--amber)}
+h2{font-size:1.5rem;color:var(--lime);margin-bottom:6px}
+.sub{color:var(--mut);margin:8px 0 0}
+section{background:var(--bg2);border:3px solid var(--ink);border-radius:26px 26px 26px 6px;padding:20px;margin-top:22px;box-shadow:6px 6px 0 var(--ink)}
+.hero{text-align:center;padding-top:8px}
+#onca{font-size:7rem;line-height:1;background:none;border:0;cursor:pointer;display:block;margin:10px auto 0;transition:transform .12s;-webkit-tap-highlight-color:transparent}
+#onca:active{transform:scale(.88) rotate(-6deg)}
+#onca.rug{animation:rug .35s}
+@keyframes rug{30%{transform:scale(1.2) rotate(6deg)}60%{transform:scale(.95) rotate(-4deg)}}
+.bubble{min-height:3.4em;background:var(--txt);color:var(--ink);font-weight:800;border-radius:18px;padding:10px 16px;display:inline-block;max-width:100%;margin-top:6px}
+.count{color:var(--mut);font-size:.9rem;margin-top:10px}
+button.act{font:800 1rem 'Nunito',sans-serif;background:var(--amber);color:var(--ink);border:3px solid var(--ink);border-radius:999px;padding:11px 20px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+button.act:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.mail{background:var(--txt);color:var(--ink);border-radius:14px;padding:14px 16px;margin:12px 0;font-size:.98rem;min-height:7.5em}
+input[type=range]{width:100%;accent-color:var(--amber);height:34px}
+.meter{font-size:3rem;text-align:center}
+.read{text-align:center;font-weight:800;min-height:3em}
+.arena{position:relative;height:150px;margin-top:10px;background:var(--ink);border-radius:18px;overflow:hidden}
+#fugitivo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);transition:left .25s,top .25s;white-space:nowrap}
+#final{display:none;text-align:center}
+#final.on{display:block}
+#final h2{font-size:2rem;color:var(--amber)}
+.fall{position:fixed;top:-40px;font-size:1.8rem;pointer-events:none;z-index:9;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){.fall{display:none}#onca.rug{animation:none}#fugitivo{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <h1>Dona Onça,<br>o expediente acabou!</h1>
+    <p class="sub">Painel oficial de controle da Operação Férias. Comece rugindo.</p>
+    <button id="onca" aria-label="Fazer a onça rugir">🐆</button>
+    <div class="bubble" id="fala" aria-live="polite">Toca em mim pra eu rugir.</div>
+    <div class="count">Rugidos: <b id="n">0</b> · chega a 10 e rola surpresa</div>
+  </header>
+
+  <section>
+    <h2>Resposta automática de e-mail</h2>
+    <p class="sub">Pra ninguém te achar nas férias. Gere até achar a sua favorita.</p>
+    <div class="mail" id="mail"></div>
+    <button class="act" id="outra">Gerar outra desculpa</button>
+  </section>
+
+  <section>
+    <h2>Medidor de paciência</h2>
+    <p class="sub">Arrasta e vê como a onça está hoje.</p>
+    <div class="meter" id="face">😌</div>
+    <input type="range" id="rg" min="0" max="100" value="60" aria-label="Nível de paciência">
+    <div class="read" id="leit"></div>
+  </section>
+
+  <section>
+    <h2>Botão de encerrar o expediente</h2>
+    <p class="sub">Parece fácil. Tenta apertar.</p>
+    <div class="arena"><button class="act" id="fugitivo">Encerrar expediente</button></div>
+  </section>
+
+  <section id="final">
+    <h2>Férias liberadas! 🌴</h2>
+    <p id="msg" style="font-size:1.1rem">Você mereceu cada dia. Desliga o notebook, esquece a senha do e-mail e volta só quando o saldo da conta pedir arrego. Aproveita muito, dona onça!</p>
+    <p id="ass" style="font-weight:800;color:var(--amber)"></p>
+  </section>
+</main>
+
+<script>
+// EDITE AQUI: seu nome para assinar a mensagem final
+const MEU_NOME = "seu nego";
+
+const falas=["GRRR! Reunião às 17h? Só se for de praia.","Rrrraaawr! Meu modo avião é permanente.","Ronc ronc… sou onça, não sou planilha.","Miau? Não. É RUGIDO.","Quem precisa de café quando se tem rede?","Grrr! Vou deixar o crachá de enfeite.","Rawr! Prazo é coisa de quem não está de férias.","Fui caçar protetor solar!","Hmm… cheiro de sol e caipirinha no ar.","Rawr! Respondo e-mail em 2027.","Estou em modo selva. Não alimente com tarefas."];
+const desc=["Olá! Estou de férias e minha onça interior assumiu o comando. Volte em alguns dias ou tente de novo na próxima encarnação.","Mensagem automática: a Mariana saiu pra caçar descanso. Se for urgente, respire fundo e tente resolver sozinho. Você consegue!","Oi! Estou fora do ar, bebendo algo gelado olhando pro nada. Retorno quando o bronzeado estiver no ponto.","Este e-mail foi engolido por uma onça de férias. Nenhum pedido sobreviveu. Tente novamente após o retorno.","Assunto: Ausente. Corpo: sim, estou descansando. Despedida: não me chame, eu te chamo.","Atenção: a pessoa que você procura virou paisagem. Retorno programado para quando eu estiver com saudade (spoiler: não vou estar)."];
+const niveis=[[0,"😴","Zerada. Nem o Wi-Fi acorda essa onça."],[20,"🫠","Derretendo. Qualquer pedido novo vira rugido."],[40,"😌","Zen, mas com um olho aberto."],[60,"😎","Tranquila e profissional. Por enquanto."],[80,"🤩","Animadíssima! Faltam horas pro paraíso."],[95,"🐆","Modo onça solta no mato. Ninguém segura."]];
+
+const $=id=>document.getElementById(id);
+let rugidos=0,fez=false;
+
+function chuva(emojis,qtd){
+  for(let i=0;i<qtd;i++){
+    const e=document.createElement('div');e.className='fall';
+    e.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left=Math.random()*100+'vw';
+    e.style.animationDuration=(2+Math.random()*2.5)+'s';
+    e.style.animationDelay=Math.random()*0.8+'s';
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),5500);
+  }
+}
+
+$('onca').addEventListener('click',()=>{
+  rugidos++;$('n').textContent=rugidos;
+  $('fala').textContent=falas[Math.floor(Math.random()*falas.length)];
+  const o=$('onca');o.classList.remove('rug');void o.offsetWidth;o.classList.add('rug');
+  if(rugidos===10){chuva(['🐆','🌴','☀️','🍹'],24);$('fala').textContent="10 rugidos! Você desbloqueou: férias com glória.";}
+});
+
+let ult=-1;
+function sorteia(){let i;do{i=Math.floor(Math.random()*desc.length)}while(i===ult);ult=i;$('mail').textContent=desc[i];}
+$('outra').addEventListener('click',sorteia);sorteia();
+
+function medidor(){
+  const v=+$('rg').value;let n=niveis[0];
+  for(const x of niveis){if(v>=x[0])n=x}
+  $('face').textContent=n[1];$('leit').textContent=n[2];
+}
+$('rg').addEventListener('input',medidor);medidor();
+
+let fugas=0;const bt=$('fugitivo');
+const rotulos=["Encerrar expediente","Ei, volta aqui!","Quase!","Tá me tirando?","Última chance…"];
+function foge(e){
+  if(fugas>=5)return;
+  e.preventDefault();
+  fugas++;
+  const a=bt.parentElement.getBoundingClientRect();
+  const x=10+Math.random()*80,y=22+Math.random()*56;
+  bt.style.left=x+'%';bt.style.top=y+'%';
+  bt.textContent=fugas<5?rotulos[fugas]:"Tá bom, você venceu. Aperta!";
+}
+bt.addEventListener('pointerenter',foge);
+bt.addEventListener('pointerdown',foge);
+bt.addEventListener('click',()=>{
+  if(fugas<5||fez)return;
+  fez=true;
+  bt.textContent="Expediente encerrado ✔";
+  const f=$('final');f.classList.add('on');
+  if(MEU_NOME)$('ass').textContent="— "+MEU_NOME;
+  chuva(['🎉','🌴','🐆','☀️','🍹','🏖️','✨'],45);
+  setTimeout(()=>f.scrollIntoView({behavior:'smooth',block:'center'}),150);
+});
+</script>
+</body>
+</html>
